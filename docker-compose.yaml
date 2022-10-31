@@ -1,0 +1,9 @@
+version: "2"
+services:
+  energyzero-tariff:
+    image: energyzero-tariff
+    container_name: energyzero-tariff
+    network_mode: host
+    restart: always
+    environment:
+      - TZ=Europe/Amsterdam
