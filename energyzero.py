@@ -24,9 +24,9 @@ electricityEntity="""
    },
    "name"                : "EnergyZero Electricity Tariff",
    "unique_id"           : "EnergyZero Electricity Tariff",
-   "state_topic"         : "homeassistant/number/energyzero_electricity_tariff/state",
-   "command_topic"       : "homeassistant/number/energyzero_electricity_tariff/command",
-   "unit_of_measurement" : "€"
+   "state_topic"         : "homeassistant/sensor/energyzero_electricity_tariff/state",
+   "command_topic"       : "homeassistant/sensor/energyzero_electricity_tariff/command",
+   "unit_of_measurement" : "EUR/kWh"
   }"""
 
 gasEntity="""
@@ -38,13 +38,13 @@ gasEntity="""
    },
    "name"                : "EnergyZero Gas Tariff",
    "unique_id"           : "EnergyZero Gas Tariff",
-   "state_topic"         : "homeassistant/number/energyzero_gas_tariff/state",
-   "command_topic"       : "homeassistant/number/energyzero_gas_tariff/command",
-   "unit_of_measurement" : "€"
+   "state_topic"         : "homeassistant/sensor/energyzero_gas_tariff/state",
+   "command_topic"       : "homeassistant/sensor/energyzero_gas_tariff/command",
+   "unit_of_measurement" : "EUR/m3"
   }"""
 
-mqttc.publish(config['discovery_prefix']+"/number/energyzero_electricity_tariff/config", payload=electricityEntity)
-mqttc.publish(config['discovery_prefix']+"/number/energyzero_gas_tariff/config", payload=gasEntity)
+mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_electricity_tariff/config", payload=electricityEntity)
+mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_gas_tariff/config", payload=gasEntity)
 
 now = datetime.datetime.utcnow()
 hour = str(now.hour)
@@ -57,11 +57,11 @@ url = "https://api.energyzero.nl/v1/energyprices?fromDate="+str(now.date())+"T"+
 r = requests.get(url)
 tariff=r.json()['Prices'][0]['price']
 print(dt_string + " Electricity tariff: "+str(tariff))
-mqttc.publish(config['discovery_prefix']+"/number/energyzero_electricity_tariff/state", payload=tariff, retain=True)
+mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_electricity_tariff/state", payload=tariff, retain=True)
 
 # Gas
 url = "https://api.energyzero.nl/v1/energyprices?fromDate="+str(now.date())+"T"+hour+"%3A00%3A00.000Z&tillDate="+str(now.date())+"T"+hour+"%3A59%3A59.999Z&interval=4&usageType=4&inclBtw=true"
 r = requests.get(url)
 tariff=r.json()['Prices'][0]['price']
 print(dt_string + " Gas tariff: "+str(tariff))
-mqttc.publish(config['discovery_prefix']+"/number/energyzero_gas_tariff/state", payload=tariff, retain=True)
+mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_gas_tariff/state", payload=tariff, retain=True)
