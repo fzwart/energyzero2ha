@@ -24,6 +24,9 @@ electricityEntity="""
    },
    "name"                : "EnergyZero Electricity Tariff",
    "unique_id"           : "EnergyZero Electricity Tariff",
+   "icon"                : "mdi:flash",
+   "force_update"        : true,
+   "state_class"         : "measurement",
    "state_topic"         : "homeassistant/sensor/energyzero_electricity_tariff/state",
    "command_topic"       : "homeassistant/sensor/energyzero_electricity_tariff/command",
    "unit_of_measurement" : "EUR/kWh"
@@ -38,6 +41,9 @@ gasEntity="""
    },
    "name"                : "EnergyZero Gas Tariff",
    "unique_id"           : "EnergyZero Gas Tariff",
+   "icon"                : "mdi:fire",
+   "force_update"        : true,
+   "state_class"         : "measurement",
    "state_topic"         : "homeassistant/sensor/energyzero_gas_tariff/state",
    "command_topic"       : "homeassistant/sensor/energyzero_gas_tariff/command",
    "unit_of_measurement" : "EUR/m3"
@@ -56,12 +62,12 @@ dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 url = "https://api.energyzero.nl/v1/energyprices?fromDate="+str(now.date())+"T"+hour+"%3A00%3A00.000Z&tillDate="+str(now.date())+"T"+hour+"%3A59%3A59.999Z&interval=4&usageType=1&inclBtw=true"
 r = requests.get(url)
 tariff=r.json()['Prices'][0]['price']
-print(dt_string + " Electricity tariff: "+str(tariff))
+print(dt_string + " UTC Electricity tariff: "+str(tariff))
 mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_electricity_tariff/state", payload=tariff, retain=True)
 
 # Gas
 url = "https://api.energyzero.nl/v1/energyprices?fromDate="+str(now.date())+"T"+hour+"%3A00%3A00.000Z&tillDate="+str(now.date())+"T"+hour+"%3A59%3A59.999Z&interval=4&usageType=4&inclBtw=true"
 r = requests.get(url)
 tariff=r.json()['Prices'][0]['price']
-print(dt_string + " Gas tariff: "+str(tariff))
+print(dt_string + " UTC Gas tariff: "+str(tariff))
 mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_gas_tariff/state", payload=tariff, retain=True)
