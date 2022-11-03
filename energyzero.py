@@ -46,7 +46,7 @@ gasEntity="""
    "state_class"         : "measurement",
    "state_topic"         : "homeassistant/sensor/energyzero_gas_tariff/state",
    "command_topic"       : "homeassistant/sensor/energyzero_gas_tariff/command",
-   "unit_of_measurement" : "EUR/m3"
+   "unit_of_measurement" : "EUR/m³"
   }"""
 
 mqttc.publish(config['discovery_prefix']+"/sensor/energyzero_electricity_tariff/config", payload=electricityEntity)
